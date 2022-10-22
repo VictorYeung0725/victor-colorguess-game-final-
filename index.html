@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HW color guess | by Phoebe</title>
+    <title>Color guess | by Victor</title>
     <link rel="stylesheet" href="./colorguess.css">
+
 <body>
     <!-- 遊戲開始 -->
     <div class="main">
-    <p class="title">色塊遊戲</p>
-    <p class="rules">請選出不同顏色的方塊</p>
-    <button class="btn_start">開始遊戲</button>
+        <p class="title">色塊遊戲</p>
+        <p class="rules">請選出不同顏色的方塊</p>
+        <button class="btn_start">開始遊戲</button>
     </div>
 
     <!-- 遊戲中 -->
     <div class="play">
-            <div class="time"></div>
-            <div class="square"></div>
-            <div class="help">
-                <div class="score">分數</div>
-                <div class="sos">SOS</div>
-                <div class="stop">STOP</div>
-            </div>  
-    </div> 
+        <div class="time"></div>
+        <div class="square"></div>
+        <div class="help">
+            <div class="score">分數</div>
+            <div class="sos">SOS</div>
+            <div class="stop">STOP</div>
+        </div>
+    </div>
     <!-- 遊戲結束 -->
     <div class="end">
         <p class="gameover">遊戲結束</p>
@@ -33,165 +35,166 @@
     </div>
 
 
-<script>
-//抓取開始按鈕、開始、遊戲中、結束
-const btnStart = document.querySelector('.btn_start')
-const main = document.querySelector('.main')
-const play = document.querySelector('.play')
-const end = document.querySelector('.end')
+    <script>
+        //抓取開始按鈕、開始、遊戲中、結束
+        const btnStart = document.querySelector('.btn_start')
+        const main = document.querySelector('.main')
+        const play = document.querySelector('.play')
+        const end = document.querySelector('.end')
 
-let time = document.querySelector('.time')//抓取時間
-let score = document.querySelector('.score')//抓取分數
-let square = document.querySelector('.square')//抓取方塊區
+        let time = document.querySelector('.time')//抓取時間
+        let score = document.querySelector('.score')//抓取分數
+        let square = document.querySelector('.square')//抓取方塊區
 
-const stop = document.querySelector('.stop')
-const sos = document.querySelector('.sos')
-const endScore = document.querySelector('.end_score')
-const comment = document.querySelector('.comment')
-const restart = document.querySelector('.restart')
+        const stop = document.querySelector('.stop')
+        const sos = document.querySelector('.sos')
+        const endScore = document.querySelector('.end_score')
+        const comment = document.querySelector('.comment')
+        const restart = document.querySelector('.restart')
 
 
-//將重複跑的式子設函式，就不用重複打這段
-//答案以亂數產生 random預設為0~1（Math.floor表示無條件捨去)
-function randomBox(){
-    ans = Math.floor(Math.random()*(level*level));
-    r = Math.floor(Math.random()*200);
-    g = Math.floor(Math.random()*200);
-    b = Math.floor(Math.random()*200);
-}
+        //將重複跑的式子設函式，就不用重複打這段
+        //答案以亂數產生 random預設為0~1（Math.floor表示無條件捨去)
+        function randomBox() {
+            ans = Math.floor(Math.random() * (level * level));
+            r = Math.floor(Math.random() * 200);
+            g = Math.floor(Math.random() * 200);
+            b = Math.floor(Math.random() * 200);
+        }
 
-//當按下遊戲開始的按鈕(遊戲首頁要消失 出現遊戲中畫面 而遊戲結束已經預設關閉故不理會)
-btnStart.onclick = function(){
-    main.style.display='none';
-    play.style.display='flex';
-    square.style.display='flex';
-    time.style.display='block';
-    
-    let timeleft; //設定倒數器
-    timeleft=30; // ↓↓↓時間倒數器要寫回去html的time裡
-    time.innerHTML = '還有' + timeleft + '秒';
+        //當按下遊戲開始的按鈕(遊戲首頁要消失 出現遊戲中畫面 而遊戲結束已經預設關閉故不理會)
+        btnStart.onclick = function () {
+            main.style.display = 'none';
+            play.style.display = 'flex';
+            square.style.display = 'flex';
+            time.style.display = 'block';
 
-    score.innerHTML = 0  //設定分數
+            let timeleft; //設定倒數器
+            timeleft = 30; // ↓↓↓時間倒數器要寫回去html的time裡
+            time.innerHTML = '還有' + timeleft + '秒';
 
-    level = 2 //方塊數2x2 3x3 4x4 5x5
-    difficulty = 0.7  //透明度越不明顯 難度越高
+            score.innerHTML = 0  //設定分數
 
-    //呼叫名為randomBox的函式
-   randomBox()
+            level = 2 //方塊數2x2 3x3 4x4 5x5
+            difficulty = 0.7  //透明度越不明顯 難度越高
 
-    for (let i=0; i < level*level ; i++) {
-        if(i == ans){
-            square.innerHTML +=
-            `<div onclick="checkanswer(true)"
+            //呼叫名為randomBox的函式
+            randomBox()
+
+            for (let i = 0; i < level * level; i++) {
+                if (i == ans) {
+                    square.innerHTML +=
+                        `<div onclick="checkanswer(true)"
             class="box ans"
-            style="width:${100/level}%;
-            height:${100/level}%;
+            style="width:${100 / level}%;
+            height:${100 / level}%;
             background-color:rgb(${r},${g},${b});
             opacity:${difficulty};">
             </div>`
-        }else{
-            square.innerHTML += 
-            `<div onclick="checkanswer(false)" 
+                } else {
+                    square.innerHTML +=
+                        `<div onclick="checkanswer(false)" 
             class="box" 
-            style="width:${100/level}%;
-            height:${100/level}%;
+            style="width:${100 / level}%;
+            height:${100 / level}%;
             background-color:rgb(${r},${g},${b})">
             </div>`
-        }
-    }
+                }
+            }
 
-    let count = setInterval(()=>{
-        timeleft -=1;
-        time.innerHTML = `還有${timeleft}秒`
-    if(timeleft == 0){
-        clearInterval(count)
-        square.style.display = "none";
-        time.style.display = "none";
-        play.style.display = "none";
-        square.innerHTML = '';
-    
-        end.style.display = "flex"
-        endScore.innerHTML = '得到：'+ score.innerHTML + '分'//依照分數給評語
-        if (score.innerHTML > 15) {
-            comment.innerHTML = '恭喜過關'
-        }else{
-            comment.innerHTML = 'oh NO~~~ 請繼續努力'
-        }
-        }
-    },1000)
+            let count = setInterval(() => {
+                timeleft -= 1;
+                time.innerHTML = `還有${timeleft}秒`
+                if (timeleft == 0) {
+                    clearInterval(count)
+                    square.style.display = "none";
+                    time.style.display = "none";
+                    play.style.display = "none";
+                    square.innerHTML = '';
 
-    restart.onclick = function(){
-    main.style.display='flex'
-    end.style.display='none'
-     }
-}
+                    end.style.display = "flex"
+                    endScore.innerHTML = '得到：' + score.innerHTML + '分'//依照分數給評語
+                    if (score.innerHTML > 15) {
+                        comment.innerHTML = '恭喜過關'
+                    } else {
+                        comment.innerHTML = 'oh NO~~~ 請繼續努力'
+                    }
+                }
+            }, 1000)
 
-//檢查玩家是否答題正確，原理是利用guess傳過來的參數判斷true/false
-function checkanswer(guess){
-    if(guess){
-        //答對加一分，用parseInt()將字串轉數字
-        score.innerHTML = parseInt(score.innerHTML) + 1 ; 
-        square.innerHTML = '' //清空square內的舊題目
+            restart.onclick = function () {
+                main.style.display = 'flex'
+                end.style.display = 'none'
+            }
+        }
 
-     //重新亂數產生答案，呼叫名為randomBox的函式
-        randomBox();
+        //檢查玩家是否答題正確，原理是利用guess傳過來的參數判斷true/false
+        function checkanswer(guess) {
+            if (guess) {
+                //答對加一分，用parseInt()將字串轉數字
+                score.innerHTML = parseInt(score.innerHTML) + 1;
+                square.innerHTML = '' //清空square內的舊題目
 
-        if (score.innerHTML >= 5 && level < 3) {
-            level = 3
-        }
-        if(score.innerHTML >= 10 && level < 4){
-            level = 4
-            difficulty = 0.5
-        }
-        if(score.innerHTML >= 15 && level < 5){
-            level = 5
-            difficulty = 0.6
-        }
-        if(score.innerHTML >= 20 && level < 6){
-            level = 6
-            difficulty = 0.8
-        }
-        for (let index = 0; index < level*level ; index++) {
-        if(index == ans){
-            square.innerHTML += 
-            `<div onclick="checkanswer(true)" 
+                //重新亂數產生答案，呼叫名為randomBox的函式
+                randomBox();
+
+                if (score.innerHTML >= 5 && level < 3) {
+                    level = 3
+                }
+                if (score.innerHTML >= 10 && level < 4) {
+                    level = 4
+                    difficulty = 0.5
+                }
+                if (score.innerHTML >= 15 && level < 5) {
+                    level = 5
+                    difficulty = 0.6
+                }
+                if (score.innerHTML >= 20 && level < 6) {
+                    level = 6
+                    difficulty = 0.8
+                }
+                for (let index = 0; index < level * level; index++) {
+                    if (index == ans) {
+                        square.innerHTML +=
+                            `<div onclick="checkanswer(true)" 
             class="box ans" 
-            style="width:${100/level}%;
-            height:${100/level}%;
+            style="width:${100 / level}%;
+            height:${100 / level}%;
             background-color:rgb(${r},${g},${b});
             opacity:${difficulty};">
             </div>`
-        }else{
-            square.innerHTML += 
-            `<div onclick="checkanswer(false)" 
+                    } else {
+                        square.innerHTML +=
+                            `<div onclick="checkanswer(false)" 
             class="box" 
-            style="width:${100/level}%;
-            height:${100/level}%;
+            style="width:${100 / level}%;
+            height:${100 / level}%;
             background-color:rgb(${r},${g},${b})">
             </div>`
-        }//無論正確與否都需要再做一次選擇方塊
-    }
-    }else{
-      score.innerHTML -= 1  //答錯扣一分
+                    }//無論正確與否都需要再做一次選擇方塊
+                }
+            } else {
+                score.innerHTML -= 1  //答錯扣一分
+            }
+            console.log(score);
         }
-        console.log(score);
-     }
 
-    //設定時間暫停按鈕
-    stop.onclick = function () {
-        alert('時間暫停！眨眨眼休息一下，但請不要作弊喔！')
-    }
-     
-    //設定SOS按鈕,提示答案
-    sos.onclick = function(){
-        const ansbox = document.querySelector('.box.ans')
-        //在點擊sos的時候先定義答案(同時有box和ans的div)＝ansbox,再寫若點擊sos這個ansbox會產生陰影(上面的css有將.box.ans再＋.act)
-        score.innerHTML -= 1
-        ansbox.classList.add('act')
-    }
+        //設定時間暫停按鈕
+        stop.onclick = function () {
+            alert('時間暫停！眨眨眼休息一下，但請不要作弊喔！')
+        }
 
- 
-</script>
+        //設定SOS按鈕,提示答案
+        sos.onclick = function () {
+            const ansbox = document.querySelector('.box.ans')
+            //在點擊sos的時候先定義答案(同時有box和ans的div)＝ansbox,再寫若點擊sos這個ansbox會產生陰影(上面的css有將.box.ans再＋.act)
+            score.innerHTML -= 1
+            ansbox.classList.add('act')
+        }
+
+
+    </script>
 
 </body>
+
 </html>
